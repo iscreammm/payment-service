@@ -5,38 +5,46 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "db_payment")
+@Table(name = "payment")
 public class Payment {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long orderId;
 
+    @Column(name = "customer_name", nullable = false)
+    private String customerName;
 
-    @Column(name = "payment_amount")
+    @Column(name = "payment_amount", nullable = false)
     private Integer paymentAmount;
 
-    @Column(name = "payment_date", columnDefinition = "timestamp with time zone")
+    @Column(name = "payment_date", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime paymentDate;
-
 
     public Payment() {
     }
 
-    public Payment(Integer paymentAmount, LocalDateTime paymentDate) {
+    public Payment(Long orderId, String customerName, Integer paymentAmount, LocalDateTime paymentDate) {
+        this.orderId = orderId;
+        this.customerName = customerName;
         this.paymentAmount = paymentAmount;
         this.paymentDate = paymentDate;
     }
 
-
-    public Long getId() {
-        return id;
+    public Long getOrderId() {
+        return orderId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
 
     public Integer getPaymentAmount() {
         return paymentAmount;
@@ -53,5 +61,4 @@ public class Payment {
     public void setPaymentDate(LocalDateTime paymentDate) {
         this.paymentDate = paymentDate;
     }
-
 }

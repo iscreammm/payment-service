@@ -1,25 +1,24 @@
 package com.example.paymentservice.web.controller;
 
 import com.example.paymentservice.app.service.PaymentService;
-import com.example.paymentservice.app.service.dto.PaymentDto;
-import com.example.paymentservice.persistence.model.Payment;
-import com.example.paymentservice.validator.ErrorsPayment;
-import com.example.paymentservice.validator.Exceptions;
+import com.example.paymentservice.web.dto.PaymentDto;
+import com.example.paymentservice.web.dto.ResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 
-import java.util.List;
-
-import static com.example.paymentservice.validator.ErrorsUtil.returnErrorsToClient;
+import static com.example.paymentservice.web.util.ErrorsUtil.returnErrorsToClient;
 
 @RestController
-@RequestMapping("/payment")
+@RequestMapping(
+        path = "/payment",
+        consumes = "application/json",
+        produces = "application/json"
+)
 public class PaymentController {
     private final PaymentService paymentService;
 
@@ -28,35 +27,20 @@ public class PaymentController {
         this.paymentService = paymentService;
     }
 
-    /*@GetMapping()
-    public void test() {
-        paymentService.save(new Payment(
-                UUID.randomUUID(),
-                "Me",
-                300,
-                LocalDateTime.now(),
-                PaymentStatus.PAID)
-        );
-    }*/
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public List<Payment> getStudents() {
-        return paymentService.findAll();
+    @GetMapping(path = "/{orderId}")
+    public ResponseEntity<ResponseDto> checkPayment(@PathVariable Long orderId) {
+        ResponseDto response = paymentService.checkPayment(orderId);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping()
-    public ResponseEntity<String> add(@RequestBody @Valid PaymentDto paymentDto,
-                                      BindingResult bindingResult) {
+    @PostMapping
+    public ResponseEntity<ResponseDto> payment(@RequestBody @Valid PaymentDto paymentDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             returnErrorsToClient(bindingResult);
 
-        paymentService.save(paymentDto);
-        return ResponseEntity.ok("your order has been paid");
-    }
+        ResponseDto response = paymentService.doPayment(paymentDto);
 
-    @ExceptionHandler
-    private ResponseEntity<ErrorsPayment> handleException(Exceptions e) {
-        ErrorsPayment response = new ErrorsPayment(e.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
