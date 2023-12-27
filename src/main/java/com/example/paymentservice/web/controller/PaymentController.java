@@ -3,7 +3,7 @@ package com.example.paymentservice.web.controller;
 import com.example.paymentservice.app.service.PaymentService;
 import com.example.paymentservice.web.dto.PaymentDto;
 import com.example.paymentservice.web.dto.ResponseDto;
-import com.example.paymentservice.web.util.PeymentValidator;
+import com.example.paymentservice.web.util.PaymentValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,13 +22,13 @@ import static com.example.paymentservice.web.util.ErrorsUtil.returnErrorsToClien
 )
 public class PaymentController {
     private final PaymentService paymentService;
-    private final PeymentValidator peymentValidator;
+    private final PaymentValidator paymentValidator;
 
 
     @Autowired
-    public PaymentController(PaymentService paymentService, PeymentValidator peymentValidator) {
+    public PaymentController(PaymentService paymentService, PaymentValidator paymentValidator) {
         this.paymentService = paymentService;
-        this.peymentValidator = peymentValidator;
+        this.paymentValidator = paymentValidator;
     }
 
     @GetMapping(path = "/{orderId}")
@@ -40,7 +40,7 @@ public class PaymentController {
 
     @PostMapping
     public ResponseEntity<ResponseDto> payment(@RequestBody @Valid PaymentDto paymentDto, BindingResult bindingResult) {
-        peymentValidator.validate(paymentDto, bindingResult);
+        paymentValidator.validate(paymentDto, bindingResult);
 
         if (bindingResult.hasErrors())
             returnErrorsToClient(bindingResult);

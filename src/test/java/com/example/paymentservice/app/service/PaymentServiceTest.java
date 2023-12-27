@@ -5,25 +5,17 @@ import com.example.paymentservice.persistence.model.Payment;
 import com.example.paymentservice.persistence.repository.PaymentRepository;
 import com.example.paymentservice.web.dto.PaymentDto;
 import com.example.paymentservice.web.dto.ResponseDto;
-import com.zaxxer.hikari.HikariDataSource;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.boot.test.context.SpringBootTest;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.lenient;
 
 class PaymentServiceTest {
 
@@ -108,12 +100,55 @@ class PaymentServiceTest {
                 payment.getCustomerName(),
                 "",
                 "",
-                payment.getPaymentAmount());
+                payment.getPaymentAmount()
+        );
 
         Mockito.when(paymentRepository.save(any(Payment.class))).thenReturn(payment);
 
         ResponseDto generated = paymentService.doPayment(paymentDto);
 
         Assertions.assertEquals(payment.getOrderId(), generated.getOrderId());
+    }
+
+    @Test
+    void checkDateFalse() throws ParseException {
+        PaymentDto paymentDto = new PaymentDto(
+                2L,
+                "",
+                "",
+                "11/23",
+                "",
+                0
+        );
+
+        assertFalse(paymentService.checkDate(paymentDto));
+    }
+
+    @Test
+    void checkDateTrue() throws ParseException {
+        PaymentDto paymentDto = new PaymentDto(
+                2L,
+                "",
+                "",
+                "11/26",
+                "",
+                0
+        );
+
+        assertTrue(paymentService.checkDate(paymentDto));
+    }
+
+    @Test
+    void checkDateException() {
+        PaymentDto paymentDto = new PaymentDto(
+                2L,
+                "",
+                "",
+                "abcd",
+                "",
+                0
+        );
+
+        assertThrows(ParseException.class, () -> paymentService.checkDate(paymentDto));
     }
 }

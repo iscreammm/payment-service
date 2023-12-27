@@ -6,16 +6,13 @@ import com.example.paymentservice.app.service.mapper.PaymentMapper;
 import com.example.paymentservice.persistence.model.Payment;
 import com.example.paymentservice.persistence.repository.PaymentRepository;
 import com.example.paymentservice.web.dto.ResponseDto;
-import org.hibernate.type.descriptor.jdbc.TimestampWithTimeZoneJdbcType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -44,7 +41,6 @@ public class PaymentService {
         paymentRepository.deleteById(uuid);
     }
 
-
     public Payment save(PaymentDto paymentDto) {
         Payment payment = PaymentMapper.INSTANCE.toEntity(paymentDto);
         payment.setPaymentDate(LocalDateTime.now());
@@ -67,7 +63,6 @@ public class PaymentService {
         } else
             return new ResponseDto(PaymentStatus.NOT_PAID, orderId);
     }
-
 
     public ResponseDto doPayment(PaymentDto paymentDto) {
         PaymentStatus status = processPayment();
@@ -93,9 +88,9 @@ public class PaymentService {
 
     public boolean checkDate(PaymentDto paymentDto) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy");
-        var dateString ="01/"+paymentDto.getDateCard();
-        var data = format.parse(dateString);
-        return (data.getTime()- new Date().getTime())>0;
-    }
+        var dateString = "01/" + paymentDto.getDateCard();
+        var date = format.parse(dateString);
 
+        return (date.after(new Date()));
+    }
 }
