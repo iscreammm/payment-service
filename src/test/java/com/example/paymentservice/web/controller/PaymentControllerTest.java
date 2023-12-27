@@ -5,6 +5,7 @@ import com.example.paymentservice.app.service.PaymentService;
 import com.example.paymentservice.web.controller.exception.BindingException;
 import com.example.paymentservice.web.dto.PaymentDto;
 import com.example.paymentservice.web.dto.ResponseDto;
+import com.example.paymentservice.web.util.PeymentValidator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,8 @@ class PaymentControllerTest {
 
     private BindingResult bindingResult;
 
+    private PeymentValidator peymentValidator;
+
     private PaymentController paymentController;
 
     @BeforeEach
@@ -28,7 +31,7 @@ class PaymentControllerTest {
         paymentService = Mockito.mock(PaymentService.class);
         bindingResult = Mockito.mock(BindingResult.class);
 
-        paymentController = new PaymentController(paymentService);
+        paymentController = new PaymentController(paymentService, peymentValidator);
     }
 
     @Test
