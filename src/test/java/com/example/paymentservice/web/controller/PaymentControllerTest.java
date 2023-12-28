@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 class PaymentControllerTest {
@@ -57,7 +58,8 @@ class PaymentControllerTest {
                 "",
                 "12/26",
                 "",
-                0);
+                BigDecimal.ONE
+        );
 
         ResponseDto response = new ResponseDto(
                 PaymentStatus.PAID,
@@ -84,7 +86,8 @@ class PaymentControllerTest {
                 "",
                 "",
                 "",
-                0);
+                BigDecimal.ONE
+        );
 
         Mockito.when(bindingResult.hasErrors()).thenReturn(true);
 

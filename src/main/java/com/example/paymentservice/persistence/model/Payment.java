@@ -2,6 +2,7 @@ package com.example.paymentservice.persistence.model;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -14,7 +15,7 @@ public class Payment {
     private String customerName;
 
     @Column(name = "payment_amount", nullable = false)
-    private Integer paymentAmount;
+    private BigDecimal paymentAmount;
 
     @Column(name = "payment_date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -23,7 +24,7 @@ public class Payment {
     public Payment() {
     }
 
-    public Payment(Long orderId, String customerName, Integer paymentAmount, LocalDateTime paymentDate) {
+    public Payment(Long orderId, String customerName, BigDecimal paymentAmount, LocalDateTime paymentDate) {
         this.orderId = orderId;
         this.customerName = customerName;
         this.paymentAmount = paymentAmount;
@@ -46,11 +47,11 @@ public class Payment {
         this.customerName = customerName;
     }
 
-    public Integer getPaymentAmount() {
+    public BigDecimal getPaymentAmount() {
         return paymentAmount;
     }
 
-    public void setPaymentAmount(Integer paymentAmount) {
+    public void setPaymentAmount(BigDecimal paymentAmount) {
         this.paymentAmount = paymentAmount;
     }
 
