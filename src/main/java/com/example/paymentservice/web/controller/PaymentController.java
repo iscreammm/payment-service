@@ -15,11 +15,7 @@ import jakarta.validation.Valid;
 import static com.example.paymentservice.web.util.ErrorsUtil.returnErrorsToClient;
 
 @RestController
-@RequestMapping(
-        path = "/payment",
-        consumes = "application/json",
-        produces = "application/json"
-)
+@RequestMapping(path = "/payment")
 public class PaymentController {
     private final PaymentService paymentService;
     private final PaymentValidator paymentValidator;
@@ -31,14 +27,20 @@ public class PaymentController {
         this.paymentValidator = paymentValidator;
     }
 
-    @GetMapping(path = "/{orderId}")
+    @GetMapping(
+            path = "/{orderId}",
+            produces = "application/json"
+    )
     public ResponseEntity<ResponseDto> checkPayment(@PathVariable Long orderId) {
         ResponseDto response = paymentService.checkPayment(orderId);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping(
+            consumes = "application/json",
+            produces = "application/json"
+    )
     public ResponseEntity<ResponseDto> payment(@RequestBody @Valid PaymentDto paymentDto, BindingResult bindingResult) {
         paymentValidator.validate(paymentDto, bindingResult);
 
