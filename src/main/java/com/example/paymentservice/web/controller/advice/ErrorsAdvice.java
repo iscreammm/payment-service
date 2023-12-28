@@ -2,6 +2,7 @@ package com.example.paymentservice.web.controller.advice;
 
 import com.example.paymentservice.web.controller.exception.BindingException;
 import com.example.paymentservice.web.dto.ErrorResponseDto;
+import org.hibernate.tool.schema.spi.SchemaManagementException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,10 @@ public class ErrorsAdvice {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(IllegalStateException.class)
+    @ExceptionHandler({
+            IllegalStateException.class,
+            SchemaManagementException.class
+    })
     private ResponseEntity<ErrorResponseDto> handleException(IllegalStateException e) {
         ErrorResponseDto response = new ErrorResponseDto("Internal Server", e.getMessage());
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
