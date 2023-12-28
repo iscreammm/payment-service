@@ -1,60 +1,41 @@
 package com.example.paymentservice.persistence.model;
 
-import com.example.paymentservice.app.enums.PaymentStatus;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
-@Table(name = "db_payment")
+@Table(name = "payment")
 public class Payment {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private Long orderId;
 
-    @Column(name = "order_id")
-    private UUID orderId;
-
-    @Column(name = "customer_name")
+    @Column(name = "customer_name", nullable = false)
     private String customerName;
 
-    @Column(name = "payment_amount")
-    private Integer paymentAmount;
+    @Column(name = "payment_amount", nullable = false)
+    private BigDecimal paymentAmount;
 
-    @Column(name = "payment_date", columnDefinition = "timestamp with time zone")
+    @Column(name = "payment_date", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime paymentDate;
-
-    @Column(name = "payment_status")
-    @Enumerated(EnumType.STRING)
-    private PaymentStatus paymentStatus;
 
     public Payment() {
     }
 
-    public Payment(UUID orderId, String customerName, Integer paymentAmount,
-                   LocalDateTime paymentDate, PaymentStatus paymentStatus) {
+    public Payment(Long orderId, String customerName, BigDecimal paymentAmount, LocalDateTime paymentDate) {
         this.orderId = orderId;
         this.customerName = customerName;
         this.paymentAmount = paymentAmount;
         this.paymentDate = paymentDate;
-        this.paymentStatus = paymentStatus;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public UUID getOrderId() {
+    public Long getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(UUID orderId) {
+    public void setOrderId(Long orderId) {
         this.orderId = orderId;
     }
 
@@ -66,11 +47,11 @@ public class Payment {
         this.customerName = customerName;
     }
 
-    public Integer getPaymentAmount() {
+    public BigDecimal getPaymentAmount() {
         return paymentAmount;
     }
 
-    public void setPaymentAmount(Integer paymentAmount) {
+    public void setPaymentAmount(BigDecimal paymentAmount) {
         this.paymentAmount = paymentAmount;
     }
 
@@ -80,13 +61,5 @@ public class Payment {
 
     public void setPaymentDate(LocalDateTime paymentDate) {
         this.paymentDate = paymentDate;
-    }
-
-    public PaymentStatus getPaymentStatus() {
-        return paymentStatus;
-    }
-
-    public void setPaymentStatus(PaymentStatus paymentStatus) {
-        this.paymentStatus = paymentStatus;
     }
 }
