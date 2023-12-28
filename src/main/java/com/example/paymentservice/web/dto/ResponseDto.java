@@ -4,8 +4,6 @@ import com.example.paymentservice.app.enums.PaymentStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.lang.NonNull;
 
-import java.math.BigDecimal;
-
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseDto {
     @NonNull
@@ -13,7 +11,7 @@ public class ResponseDto {
     @NonNull
     private Long orderId;
     private String date;
-    private BigDecimal price;
+    private Integer price;
 
     public ResponseDto(@NonNull PaymentStatus status, @NonNull Long orderId) {
         this.status = status;
@@ -22,7 +20,7 @@ public class ResponseDto {
         this.price = null;
     }
 
-    public ResponseDto(@NonNull PaymentStatus status, @NonNull Long orderId, String date, BigDecimal price) {
+    public ResponseDto(@NonNull PaymentStatus status, @NonNull Long orderId, String date, Integer price) {
         this.status = status;
         this.orderId = orderId;
         this.date = date;
@@ -55,11 +53,11 @@ public class ResponseDto {
         this.date = date;
     }
 
-    public BigDecimal getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 }

@@ -3,8 +3,6 @@ package com.example.paymentservice.web.dto;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 
-import java.math.BigDecimal;
-
 public class PaymentDto {
     private Long orderId;
 
@@ -30,10 +28,10 @@ public class PaymentDto {
     @Pattern(regexp="^\\d{3}$", message = "CVV код должен состоять из 3 цифр")
     private String cvv;
 
-    private BigDecimal totalPrice;
+    private Integer totalPrice;
 
     public PaymentDto(Long orderId, String cardNumber, String customerName,
-                      String dateCard, String cvv, BigDecimal totalPrice) {
+                      String dateCard, String cvv, Integer totalPrice) {
         this.orderId = orderId;
         this.cardNumber = cardNumber;
         this.customerName = customerName;
@@ -82,11 +80,11 @@ public class PaymentDto {
         this.cvv = cvv;
     }
 
-    public BigDecimal getTotalPrice() {
+    public Integer getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(BigDecimal totalPrice) {
+    public void setTotalPrice(Integer totalPrice) {
         this.totalPrice = totalPrice;
     }
 }

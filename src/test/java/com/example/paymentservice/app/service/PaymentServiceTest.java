@@ -10,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.math.BigDecimal;
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -33,7 +32,7 @@ class PaymentServiceTest {
 
     @Test
     void save() {
-        Payment payment = new Payment(2L, "", BigDecimal.ONE, LocalDateTime.now());
+        Payment payment = new Payment(2L, "", 2, LocalDateTime.now());
         PaymentDto paymentDto = new PaymentDto(
                 payment.getOrderId(),
                 "",
@@ -52,7 +51,7 @@ class PaymentServiceTest {
     @Test
     void checkPaymentPresent() {
         Long id = 2L;
-        Payment payment = new Payment(id, "", BigDecimal.ONE, LocalDateTime.now());
+        Payment payment = new Payment(id, "", 2, LocalDateTime.now());
 
         Mockito.when(paymentRepository.findById(id)).thenReturn(Optional.of(payment));
 
@@ -73,7 +72,7 @@ class PaymentServiceTest {
     @Test
     void checkPaymentEmpty() {
         Long id = 2L;
-        Payment payment = new Payment(id, "", BigDecimal.ONE, LocalDateTime.now());
+        Payment payment = new Payment(id, "", 2, LocalDateTime.now());
 
         Mockito.when(paymentRepository.findById(id)).thenReturn(Optional.empty());
 
@@ -94,7 +93,7 @@ class PaymentServiceTest {
 
     @Test
     void doPayment() {
-        Payment payment = new Payment(2L, "", BigDecimal.ONE, LocalDateTime.now());
+        Payment payment = new Payment(2L, "", 2, LocalDateTime.now());
         PaymentDto paymentDto = new PaymentDto(
                 payment.getOrderId(),
                 "",
@@ -119,7 +118,7 @@ class PaymentServiceTest {
                 "",
                 "11/23",
                 "",
-                BigDecimal.ONE
+                0
         );
 
         assertFalse(paymentService.checkDate(paymentDto));
@@ -133,7 +132,7 @@ class PaymentServiceTest {
                 "",
                 "11/26",
                 "",
-                BigDecimal.ONE
+                0
         );
 
         assertTrue(paymentService.checkDate(paymentDto));
@@ -147,7 +146,7 @@ class PaymentServiceTest {
                 "",
                 "abcd",
                 "",
-                BigDecimal.ONE
+                0
         );
 
         assertThrows(ParseException.class, () -> paymentService.checkDate(paymentDto));
